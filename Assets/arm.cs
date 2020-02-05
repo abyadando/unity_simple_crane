@@ -63,7 +63,7 @@ public class arm : MonoBehaviour
         if (numberOfItems[3] < 1) statsWindow.GetComponent<TextMesh>().text = "Okna: brak budulca";
         else statsWindow.GetComponent<TextMesh>().text = "Okna: " + numberOfItems[3].ToString();
 
-        if (Input.GetKey("up") && !build && !putback)
+        if (Input.GetKeyUp("up") && !build && !putback)
         {
             build = true;
         }
@@ -125,7 +125,7 @@ public class arm : MonoBehaviour
     void takeFromWorkshop(int thing)
     {
         if (numberOfItems[ITEM] < 1) return;
-        if (!isMoving)
+        if (!isMoving && build)
         {
             prop_x = workshop.x + 0.5f;
             prop_y = workshop.y + 1.1f;
@@ -142,14 +142,15 @@ public class arm : MonoBehaviour
                 inWorkshop = true;
                 holding = true;
                 numberOfItems[thing] -= 1;
+                build = false;
             }
-            build = false;
+            
         }
     }
 
     void moveToCoords(int x, int y)
     {
-        if (!isMoving)
+        if (!isMoving && inWorkshop && build)
         {
             prop_x = x + 0.5f;
             prop_y = y + 1.1f;
@@ -168,10 +169,11 @@ public class arm : MonoBehaviour
                 built.Add(prefab);
                 holding = false;
                 inWorkshop = false;
-      
+                build = false;
+
             }
 
-            build = false;
+            
 
        
         }
