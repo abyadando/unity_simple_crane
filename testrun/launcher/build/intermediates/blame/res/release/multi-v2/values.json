@@ -1,0 +1,45 @@
+{
+    "logs": [
+        {
+            "outputFile": "C:\\Users\\Rafal\\Desktop\\Develop\\unity\\unity_simple_crane\\testrun\\launcher\\build\\intermediates\\incremental\\mergeReleaseResources\\merged.dir\\values\\values.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\Rafal\\Desktop\\Develop\\unity\\unity_simple_crane\\testrun\\launcher\\src\\main\\res\\values\\styles.xml",
+                    "from": {
+                        "startLines": "5,2,7",
+                        "startColumns": "0,0,0",
+                        "startOffsets": "190,53,288",
+                        "endLines": "6,4,10",
+                        "endColumns": "8,8,8",
+                        "endOffsets": "286,188,513"
+                    },
+                    "to": {
+                        "startLines": "4,6,9",
+                        "startColumns": "4,4,4",
+                        "startOffsets": "166,266,404",
+                        "endLines": "5,8,12",
+                        "endColumns": "8,8,8",
+                        "endOffsets": "261,399,626"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\Rafal\\Desktop\\Develop\\unity\\unity_simple_crane\\testrun\\launcher\\src\\main\\res\\values\\strings.xml",
+                    "from": {
+                        "startLines": "2,3",
+                        "startColumns": "2,2",
+                        "startOffsets": "55,97",
+                        "endColumns": "40,65",
+                        "endOffsets": "93,160"
+                    },
+                    "to": {
+                        "startLines": "2,3",
+                        "startColumns": "4,4",
+                        "startOffsets": "55,98",
+                        "endColumns": "42,67",
+                        "endOffsets": "93,161"
+                    }
+                }
+            ]
+        }
+    ]
+}

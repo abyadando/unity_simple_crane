@@ -1,0 +1,15 @@
+{
+    "name": "IBM.Cloud.SDK",
+    "references": [
+        "GUID:7b6ef9b5888245a438269f627a50d991"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

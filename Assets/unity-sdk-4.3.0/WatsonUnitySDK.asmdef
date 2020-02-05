@@ -1,0 +1,16 @@
+{
+    "name": "WatsonUnitySDK",
+    "references": [
+        "IBM.Cloud.SDK",
+        "Scripts"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
