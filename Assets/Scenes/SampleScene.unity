@@ -228,7 +228,7 @@ GameObject:
   - component: {fileID: 343683637}
   - component: {fileID: 343683636}
   m_Layer: 0
-  m_Name: Cube (1)
+  m_Name: ArmCube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -246,15 +246,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 275261bf3ef054c4182635352f1f11fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
-  mass: 250
-  built: []
+  busy: 0
   items:
-  - {fileID: 6096506143740125916, guid: 73d7ac8d1d599f54cb8917f6c4eae2b5, type: 3}
-  - {fileID: 8886162878564466709, guid: 9249fa3728448cc40b0bb295ac72cb08, type: 3}
-  - {fileID: 6913569504937234481, guid: 2849f26c87c21174791b8927ce4125dd, type: 3}
-  - {fileID: 7961069859649347989, guid: 2f4d88aabfef87c4caa0e2805f84c6d9, type: 3}
-  numberOfItems: 0a000000010000000100000003000000
+  - number: 1
+    prefab: {fileID: 6913569504937234481, guid: 2849f26c87c21174791b8927ce4125dd,
+      type: 3}
+    stat: {fileID: 1251795733}
+    name: door
+  - number: 5
+    prefab: {fileID: 8886162878564466709, guid: 9249fa3728448cc40b0bb295ac72cb08,
+      type: 3}
+    stat: {fileID: 1946233345}
+    name: roof
+  - number: 10
+    prefab: {fileID: 6096506143740125916, guid: 73d7ac8d1d599f54cb8917f6c4eae2b5,
+      type: 3}
+    stat: {fileID: 1340500072}
+    name: wall
+  - number: 2
+    prefab: {fileID: 7961069859649347989, guid: 2f4d88aabfef87c4caa0e2805f84c6d9,
+      type: 3}
+    stat: {fileID: 1295399556}
+    name: window
 --- !u!65 &343683637
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -323,7 +336,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 343683635}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.5, y: 3.95, z: 0}
+  m_LocalPosition: {x: -6, y: 4, z: 0}
   m_LocalScale: {x: 1, y: 0.2, z: 1}
   m_Children:
   - {fileID: 1401740662}
@@ -583,7 +596,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 428501211}
   m_LocalRotation: {x: -0, y: -0, z: 0.70710695, w: 0.7071066}
-  m_LocalPosition: {x: 5.42, y: -0.31, z: 0}
+  m_LocalPosition: {x: 6.21, y: -0.31, z: 0}
   m_LocalScale: {x: 10.225, y: 2.4375, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -642,7 +655,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 11.07
+  orthographic size: 12.87
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -864,7 +877,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1043699006}
   m_LocalRotation: {x: -0, y: -0, z: 0.70710695, w: 0.7071066}
-  m_LocalPosition: {x: -5.34, y: -0.31, z: 0}
+  m_LocalPosition: {x: -6.31, y: -1.95, z: 0.38}
   m_LocalScale: {x: 10.225, y: 2.4375, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1406,8 +1419,8 @@ MonoBehaviour:
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
-  m_ScreenMatchMode: 2
-  m_MatchWidthOrHeight: 0
+  m_ScreenMatchMode: 0
+  m_MatchWidthOrHeight: 1
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96

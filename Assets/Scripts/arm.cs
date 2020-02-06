@@ -1,39 +1,38 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+[System.Serializable]
+public struct Item
+{
+    public int number;
+    public GameObject prefab;
+    public TextMesh stat;
+    public string name;
+    public void refreshStat(int index)
+    {
+        stat.text = index + ": " +name + ": " + number;
+    }
+}
 public class arm : MonoBehaviour
 {
-    public float speed = 5.0f;
-    public float mass = 1000.0f;
-    private Vector2 workshop;
-    private Vector2 position;
-    private float prop_x;
-    private float prop_y;
-    private bool isMoving = false;
-    private bool inWorkshop = false;
-    private bool holding = false;
-    private GameObject prefab;
-    public List<GameObject> built = new List<GameObject>();
-    private bool build = false;
-    private bool putback = false;
-    private GameObject lastItem;
-    public GameObject[] items;
-
     public static arm Instance;
     // ILOSC  DZIAŁA!?
     // SCIANY
     // DACHY
     // DRZWI
     // OKNA
-    public int[] numberOfItems = new int[] { 10, 1, 1, 3 };
-    private GameObject statsWall;
-    private GameObject statsRoof;
-    private GameObject statsDoor;
-    private GameObject statsWindow;
-    private int ITEM = 0;
-    private int X = 0;
-    private int Y = 3;
+    const int coordY = 4;
+    float speed = 2.5f;
+    public  bool busy = false;
+    public bool selecting = false;
+    public bool holding = false;
+    public bool inWorkshop = true;
+
+    public Item[] items;
+    GameObject Selected=null;
+    int SelectedID = 0;
+
+    string move = null;
     // Start is called before the first frame update
     private void Awake()
     {
@@ -42,97 +41,153 @@ public class arm : MonoBehaviour
     }
     void Start()
     {
-        workshop = new Vector2(-6.0f, 3.4f);
-        position = gameObject.transform.position;
-
-
-        statsWall = GameObject.Find("Stats_Wall");
-        statsRoof = GameObject.Find("Stats_Roof");
-        statsDoor = GameObject.Find("Stats_Door");
-        statsWindow = GameObject.Find("Stats_Window");
-
+        for(int i =0; i<items.Length; i++)
+        {
+            items[i].refreshStat(i);
+        }
 
     }
 
     // Update is called once per frame
+    // Update is called once per frame
     public void UpdateArm(string move)
     {
-        if (numberOfItems[0] < 1) statsWall.GetComponent<TextMesh>().text = "Ściany: brak budulca" ;
-        else statsWall.GetComponent<TextMesh>().text = "Ściany: " + numberOfItems[0].ToString();
-
-        if (numberOfItems[1] < 1) statsRoof.GetComponent<TextMesh>().text = "Dachy: brak budulca";
-        else statsRoof.GetComponent<TextMesh>().text = "Dachy: " + numberOfItems[1].ToString();
-
-        if (numberOfItems[2] < 1) statsDoor.GetComponent<TextMesh>().text = "Drzwi: brak budulca";
-        else statsDoor.GetComponent<TextMesh>().text = "Drzwi: " + numberOfItems[2].ToString();
-
-        if (numberOfItems[3] < 1) statsWindow.GetComponent<TextMesh>().text = "Okna: brak budulca";
-        else statsWindow.GetComponent<TextMesh>().text = "Okna: " + numberOfItems[3].ToString();
-
-        if (move == "up" && !build && !putback)
+        if (!busy)
         {
-            build = true;
-        }
-        else if (move == "down")
-        {
-            if(!build && !putback)
+            busy = true;
+            if (!selecting)
             {
-                if (built.Count > 0) putback = true;
+                switch (move)
+                {
+                    case "up":
+                        StartCoroutine(Release(GoToWorkshop(),.6f));
+                        break;
+                    case "down":
+                        if (holding && !inWorkshop)
+                        StartCoroutine(Release(Drop(), .6f));
+                        break;
+                    case "left":
+                        StartCoroutine(Release(GoTo(new Vector2(Mathf.Max(transform.position.x - 1, -4), coordY)),.6f));
+                        inWorkshop = false;
+                        break;
+                    case "right":
+                        float posX = Mathf.Clamp(transform.position.x + 1, -4,4);
+                        StartCoroutine(Release(GoTo(new Vector2(posX , coordY)),.6f));
+                        inWorkshop = false;
+                        break;
+                    default:
+                        Debug.Log(move);
+                        busy = false;
+                        break;
+                }
             }
-           
-        }
-        else if (Input.GetKey("1"))
-        {
-            ITEM = 1;
-        }
-        else if (Input.GetKey("0"))
-        {
-            ITEM = 0;
-        }
-        else if (Input.GetKey("2"))
-        {
-            ITEM = 2;
-        }
-        else if (Input.GetKey("3"))
-        {
-            ITEM = 3;
-        }
-        else if (move == "right")
-        {
-            if (X >= 3) return;
-            X += 1;
-            return;
-        }
-        else if (move == "left")
-        {
-            if (X <= -4) return;
-            X -= 1;
-            return;
+            else
+            {
+                switch (move)
+                {
+                    case "0":
+                    case "door":
+                        StartCoroutine(Release(SelectElement(0,items[0].prefab),.6f));
+                        break;
+                    case "1":
+                    case "roof":
+                        StartCoroutine(Release(SelectElement(1,items[1].prefab), .6f));
+                        break;
+                    case "2":
+                    case "wall":
+                        StartCoroutine(Release(SelectElement(2,items[2].prefab), .6f));
+                    break;
+                    case "3":
+                    case "window":
+                        StartCoroutine(Release(SelectElement(3,items[3].prefab), .6f));
+                        break;
+                    
+                    default:
+                        Debug.Log(move);
+                        busy = false;
+                        break;
+                }
+            }
+            
         }
 
-       
-        
-        
+
     }
-    private void Update()
+    IEnumerator GoToWorkshop()
     {
-        if (build && !putback)
-        {
-            if (!inWorkshop && !putback)
-            {
-                takeFromWorkshop(ITEM);
-            }
-            else if (inWorkshop && !putback)
-            {
-                moveToCoords(X, Y);
-            }
-        }
-        else if (putback && !build)
-        {
-            putBackToWorkshop();
-        }
+        selecting = true;
+        yield return StartCoroutine(GoTo(new Vector2(-6, coordY)));
+    }
+    IEnumerator Drop()
+    {
+        float desiredHeight = -(items[SelectedID].prefab.transform.localScale.y == 1 ? 1 : items[SelectedID].prefab.transform.localScale.y / 2);
+        yield return StartCoroutine(GoTo(new Vector2(this.transform.position.x,desiredHeight)));
+        Selected.transform.parent = null;
+        Selected = null;
+        yield return StartCoroutine(GoTo(new Vector2(this.transform.position.x, coordY)));
+        holding = false;
     }
 
+    IEnumerator SelectElement(int index,GameObject Element)
+    {
+        
+        
+        yield return StartCoroutine(GoTo(new Vector2(-6, coordY-2)));
+        if (Selected)
+        {
+            Destroy(Selected);
+            items[index].number= items[index].number+1;
+            items[index].refreshStat(index);
+        }
+        else
+        {
+            if (items[index].number == 0)
+            {
+                yield return StartCoroutine(GoTo(new Vector2(-6, coordY)));
+                yield break;
+            }
+            items[index].number = items[index].number - 1;
+            items[index].refreshStat(index);
+            float offset = Element.transform.localScale.y == 1 ? 1 : Element.transform.localScale.y/2;
+            Selected = Instantiate(Element, new Vector2(this.transform.position.x,this.transform.position.y-offset),Quaternion.identity);
+            Selected.transform.parent = this.transform;
+        }
+        yield return StartCoroutine(GoTo(new Vector2(-6, coordY )));
+        holding = true;
+        selecting = false;
+    }
+    IEnumerator Release(IEnumerator coroutine,float timeAfter)
+    {
+        yield return StartCoroutine(coroutine);
+        yield return new WaitForSeconds(timeAfter);
+        busy = false;
+    }
+
+
+    IEnumerator GoTo(Vector2 coord)
+    {
+        
+        float step = speed * Time.deltaTime;
+        while (transform.position.y != coord.y )
+        {
+            Debug.Log(coord);
+
+            transform.position = Vector2.MoveTowards(transform.position, new Vector2(transform.position.x, coord.y), step);
+            yield return null;
+
+        }
+        while (transform.position.y != coord.y || transform.position.x != coord.x) {
+
+            transform.position = Vector2.MoveTowards(transform.position, coord, step);
+            yield return null;
+
+        }
+
+
+          
+    }
+
+    /*
     void takeFromWorkshop(int thing)
     {
         if (numberOfItems[ITEM] < 1) return;
@@ -250,9 +305,9 @@ public class arm : MonoBehaviour
 
                
             }
-           
-            
-        }
-    }
-        
+
+
+}
+}
+   */
 }

@@ -231,22 +231,23 @@ namespace IBM.Watsson.Examples
                         {
                             arm.Instance.UpdateArm("down");
                         }
-                        if (alt.transcript.Contains("one") || alt.transcript.Contains("1"))
-                        {
-                            arm.Instance.UpdateArm("1");
-                        }
-                        if (alt.transcript.Contains("two") || alt.transcript.Contains("2") || alt.transcript.Contains("second"))
-                        {
-                            arm.Instance.UpdateArm("2");
-                        }
-                        if (alt.transcript.Contains("three") || alt.transcript.Contains("3"))
-                        {
-                            arm.Instance.UpdateArm("3");
-                        }
-                        if (alt.transcript.Contains("zero") || alt.transcript.Contains("0"))
+                        if (alt.transcript.Contains("zero") || alt.transcript.Contains("0") || alt.transcript.Contains("door"))
                         {
                             arm.Instance.UpdateArm("0");
                         }
+                        if (alt.transcript.Contains("one") || alt.transcript.Contains("1") || alt.transcript.Contains("roof"))
+                        {
+                            arm.Instance.UpdateArm("1");
+                        }
+                        if (alt.transcript.Contains("two") || alt.transcript.Contains("2") || alt.transcript.Contains("second") || alt.transcript.Contains("wall"))
+                        {
+                            arm.Instance.UpdateArm("2");
+                        }
+                        if (alt.transcript.Contains("three") || alt.transcript.Contains("3") || alt.transcript.Contains("window"))
+                        {
+                            arm.Instance.UpdateArm("3");
+                        }
+                      
                     }
 
                     if (res.keywords_result != null && res.keywords_result.keyword != null)
