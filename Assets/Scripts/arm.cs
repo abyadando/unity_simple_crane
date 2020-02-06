@@ -16,11 +16,7 @@ public struct Item
 public class arm : MonoBehaviour
 {
     public static arm Instance;
-    // ILOSC  DZIAŁA!?
-    // SCIANY
-    // DACHY
-    // DRZWI
-    // OKNA
+
     const int coordY = 4;
     float speed = 2.5f;
     public  bool busy = false;
@@ -29,11 +25,10 @@ public class arm : MonoBehaviour
     public bool inWorkshop = true;
 
     public Item[] items;
-    GameObject Selected=null;
+   public  GameObject Selected=null;
     int SelectedID = 0;
+   public float[] columnHeights = new float[9];
 
-    string move = null;
-    // Start is called before the first frame update
     private void Awake()
     {
         if(Instance==null)
@@ -41,6 +36,8 @@ public class arm : MonoBehaviour
     }
     void Start()
     {
+
+        //setting text for info
         for(int i =0; i<items.Length; i++)
         {
             items[i].refreshStat(i);
@@ -48,8 +45,6 @@ public class arm : MonoBehaviour
 
     }
 
-    // Update is called once per frame
-    // Update is called once per frame
     public void UpdateArm(string move)
     {
         if (!busy)
@@ -99,9 +94,9 @@ public class arm : MonoBehaviour
                     break;
                     case "3":
                     case "window":
-                        StartCoroutine(Release(SelectElement(3,items[3].prefab), .6f));
+                        StartCoroutine(Release(SelectElement(3, items[3].prefab), .6f));
                         break;
-                    
+
                     default:
                         Debug.Log(move);
                         busy = false;
@@ -116,23 +111,35 @@ public class arm : MonoBehaviour
     IEnumerator GoToWorkshop()
     {
         selecting = true;
+        inWorkshop = true;
         yield return StartCoroutine(GoTo(new Vector2(-6, coordY)));
     }
     IEnumerator Drop()
     {
-        float desiredHeight = -(items[SelectedID].prefab.transform.localScale.y == 1 ? 1 : items[SelectedID].prefab.transform.localScale.y / 2);
+        int columnIndex = (int)transform.position.x + 4;
+        float desiredHeight = columnHeights[columnIndex] + items[SelectedID].prefab.transform.localScale.y/2-4;
+
+        //move down
         yield return StartCoroutine(GoTo(new Vector2(this.transform.position.x,desiredHeight)));
+
+
         Selected.transform.parent = null;
         Selected = null;
+       
+        columnHeights[columnIndex] += items[SelectedID].prefab.transform.localScale.y;
+        SelectedID = 0;
+        //move up
         yield return StartCoroutine(GoTo(new Vector2(this.transform.position.x, coordY)));
         holding = false;
+
     }
 
     IEnumerator SelectElement(int index,GameObject Element)
     {
         
-        
+        // nice animation
         yield return StartCoroutine(GoTo(new Vector2(-6, coordY-2)));
+        //if you want to change your mind
         if (Selected)
         {
             Destroy(Selected);
@@ -151,13 +158,18 @@ public class arm : MonoBehaviour
             float offset = Element.transform.localScale.y == 1 ? 1 : Element.transform.localScale.y/2;
             Selected = Instantiate(Element, new Vector2(this.transform.position.x,this.transform.position.y-offset),Quaternion.identity);
             Selected.transform.parent = this.transform;
+            SelectedID = index;
         }
+
+        // nice animation
         yield return StartCoroutine(GoTo(new Vector2(-6, coordY )));
         holding = true;
         selecting = false;
     }
     IEnumerator Release(IEnumerator coroutine,float timeAfter)
     {
+
+        //release control for next command because speach recognition send more that one result
         yield return StartCoroutine(coroutine);
         yield return new WaitForSeconds(timeAfter);
         busy = false;
@@ -168,6 +180,8 @@ public class arm : MonoBehaviour
     {
         
         float step = speed * Time.deltaTime;
+
+        //go up
         while (transform.position.y != coord.y )
         {
             Debug.Log(coord);
@@ -176,6 +190,7 @@ public class arm : MonoBehaviour
             yield return null;
 
         }
+        //go desired direction
         while (transform.position.y != coord.y || transform.position.x != coord.x) {
 
             transform.position = Vector2.MoveTowards(transform.position, coord, step);
