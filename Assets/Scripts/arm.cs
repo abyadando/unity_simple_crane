@@ -104,6 +104,12 @@ public class arm : MonoBehaviour
             return;
         }
 
+       
+        
+        
+    }
+    private void Update()
+    {
         if (build && !putback)
         {
             if (!inWorkshop && !putback)
@@ -112,16 +118,15 @@ public class arm : MonoBehaviour
             }
             else if (inWorkshop && !putback)
             {
-                moveToCoords(X,Y);
+                moveToCoords(X, Y);
             }
         }
-        else if (putback && !build) {
+        else if (putback && !build)
+        {
             putBackToWorkshop();
         }
-        
-        
     }
-    
+
     void takeFromWorkshop(int thing)
     {
         if (numberOfItems[ITEM] < 1) return;
