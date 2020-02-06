@@ -235,7 +235,7 @@ namespace IBM.Watsson.Examples
                         {
                             arm.Instance.UpdateArm("1");
                         }
-                        if (alt.transcript.Contains("two") || alt.transcript.Contains("2"))
+                        if (alt.transcript.Contains("two") || alt.transcript.Contains("2") || alt.transcript.Contains("second"))
                         {
                             arm.Instance.UpdateArm("2");
                         }
