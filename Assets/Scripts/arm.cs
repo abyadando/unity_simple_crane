@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -20,6 +20,7 @@ public class arm : MonoBehaviour
     private GameObject lastItem;
     public GameObject[] items;
 
+    public static arm Instance;
     // ILOSC  DZIAŁA!?
     // SCIANY
     // DACHY
@@ -34,6 +35,11 @@ public class arm : MonoBehaviour
     private int X = 0;
     private int Y = 3;
     // Start is called before the first frame update
+    private void Awake()
+    {
+        if(Instance==null)
+       Instance = this;
+    }
     void Start()
     {
         workshop = new Vector2(-6.0f, 3.4f);

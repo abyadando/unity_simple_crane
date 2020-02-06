@@ -57,7 +57,6 @@ namespace IBM.Watsson.Examples
         private AudioClip _recording = null;
         private int _recordingBufferSize = 1;
         private int _recordingHZ = 22050;
-        public arm arm = new arm();
 
         private SpeechToTextService _service;
 
@@ -206,6 +205,7 @@ namespace IBM.Watsson.Examples
 
         private void OnRecognize(SpeechRecognitionEvent result)
         {
+            
             if (result != null && result.results.Length > 0)
             {
                 foreach (var res in result.results)
@@ -217,35 +217,35 @@ namespace IBM.Watsson.Examples
                         ResultsField.text = text;
 
                         if (alt.transcript.Contains("left")) {
-                            arm.UpdateArm("left");
+                            arm.Instance.UpdateArm("left");
                         }
                         if (alt.transcript.Contains("right"))
                         {
-                            arm.UpdateArm("right");
+                            arm.Instance.UpdateArm("right");
                         }
                         if (alt.transcript.Contains("pickup") || alt.transcript.Contains("take"))
                         {
-                            arm.UpdateArm("up");
+                            arm.Instance.UpdateArm("up");
                         }
                         if (alt.transcript.Contains("drop"))
                         {
-                            arm.UpdateArm("down");
+                            arm.Instance.UpdateArm("down");
                         }
-                        if (alt.transcript.Contains("one"))
+                        if (alt.transcript.Contains("one") || alt.transcript.Contains("1"))
                         {
-                            arm.UpdateArm("1");
+                            arm.Instance.UpdateArm("1");
                         }
-                        if (alt.transcript.Contains("two"))
+                        if (alt.transcript.Contains("two") || alt.transcript.Contains("2"))
                         {
-                            arm.UpdateArm("2");
+                            arm.Instance.UpdateArm("2");
                         }
-                        if (alt.transcript.Contains("three"))
+                        if (alt.transcript.Contains("three") || alt.transcript.Contains("3"))
                         {
-                            arm.UpdateArm("3");
+                            arm.Instance.UpdateArm("3");
                         }
-                        if (alt.transcript.Contains("zero"))
+                        if (alt.transcript.Contains("zero") || alt.transcript.Contains("0"))
                         {
-                            arm.UpdateArm("0");
+                            arm.Instance.UpdateArm("0");
                         }
                     }
 
