@@ -28,6 +28,7 @@ public class arm : MonoBehaviour
    public  GameObject Selected=null;
     int SelectedID = 0;
    public float[] columnHeights = new float[9];
+    public Renderer r;
 
     private void Awake()
     {
@@ -43,6 +44,77 @@ public class arm : MonoBehaviour
             items[i].refreshStat(i);
         }
 
+    }
+    private void Update()
+    {
+        r.material.color = busy ? Color.red : Color.yellow;
+    }
+
+    public IEnumerator ApplyCommand(string text) {
+        string commandElement = text;
+        yield return StartCoroutine(UpdateArmText(commandElement));
+    }
+
+    IEnumerator  UpdateArmText(string move)
+    {
+        if (!busy)
+        {
+            busy = true;
+            if (!selecting)
+            {
+                switch (move)
+                {
+                    case "magazyn":
+                        yield return StartCoroutine(Release(GoToWorkshop(), .6f));
+                        break;
+                    case "upuœæ":
+                        if (holding && !inWorkshop)
+                            yield return StartCoroutine(Release(Drop(), .6f));
+                        break;
+                    case "lewo":
+                        yield return StartCoroutine(Release(GoTo(new Vector2(Mathf.Max(transform.position.x - 1, -4), coordY)), .6f));
+                        inWorkshop = false;
+                        break;
+                    case "prawo":
+                        float posX = Mathf.Clamp(transform.position.x + 1, -4, 4);
+                        yield return StartCoroutine(Release(GoTo(new Vector2(posX, coordY)), .6f));
+                        inWorkshop = false;
+                        break;
+                    default:
+                        Debug.Log(move);
+                        busy = false;
+                        break;
+                }
+            }
+            else
+            {
+                switch (move)
+                {
+                    case "0":
+                    case "drzwi":
+                        yield return StartCoroutine(Release(SelectElement(0, items[0].prefab), .6f));
+                        break;
+                    case "1":
+                    case "dach":
+                        yield return StartCoroutine(Release(SelectElement(1, items[1].prefab), .6f));
+                        break;
+                    case "2":
+                    case "œciana":
+                        yield return StartCoroutine(Release(SelectElement(2, items[2].prefab), .6f));
+                        break;
+                    case "3":
+                    case "okno":
+                        yield return  StartCoroutine(Release(SelectElement(3, items[3].prefab), .6f));
+                        break;
+
+                    default:
+                        Debug.Log(move);
+                        busy = false;
+                        break;
+                }
+            }
+
+        }
     }
 
     public void UpdateArm(string move)
