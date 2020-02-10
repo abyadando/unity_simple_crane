@@ -51,8 +51,64 @@ public class arm : MonoBehaviour
     }
 
     public IEnumerator ApplyCommand(string text) {
-        string commandElement = text;
-        yield return StartCoroutine(UpdateArmText(commandElement));
+        string[] textArr;
+        int stepsnumber = 0;
+        string brick = "empty";
+        textArr = text.Split(' ');
+        foreach (var value in textArr)
+        {
+            //Debug.Log(value);
+            int number;
+
+            bool success = int.TryParse(value, out number);
+            if (success)
+            {
+                //Debug.Log("Number"); works
+                if(number<= 9 && stepsnumber == 0)
+                {
+                    stepsnumber = number;
+                    //Debug.Log(stepsnumber); works
+                }
+            }
+            else
+            {
+                //Debug.Log("not number"); works
+                switch(value)
+                {
+                    case "drzwi":
+                    case "drzwiami":
+                        brick = "drzwi"; // we can add here extra cases to doors
+                        break;
+                    case "okno":
+                    case "okna":
+                        brick = "okno"; // extra cases for windows
+                        break;
+                    case "dach":
+                    case "dachu":
+                        brick = "dach"; // extra cases for roof
+                        break;
+                    case "œciana":
+                    case "œcianê":
+                    case "œciane":
+                    case "sciana":
+                    case "sciane":
+                        brick = "œciana"; //extra cases for wall 
+                        break;
+                }
+            }
+        }
+        if (stepsnumber > 0 && brick != "empty")
+        {
+            yield return StartCoroutine(UpdateArmText(brick));
+            for (int i = 0; i < stepsnumber; i++)
+            {
+                yield return StartCoroutine(UpdateArmText("prawo"));
+            }
+            yield return StartCoroutine(UpdateArmText("upuœæ"));
+            yield return StartCoroutine(UpdateArmText("magazyn"));
+        }
+        //string commandElement = text;
+        //yield return StartCoroutine(UpdateArmText(commandElement));
     }
 
     IEnumerator  UpdateArmText(string move)
